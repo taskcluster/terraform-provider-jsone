@@ -38,3 +38,6 @@ These are mutually exclusive. `context` should be good enough for most cases and
 but if you run into issues with how terraform handles mixed-type maps or need to pass in typed data, opt
 for `yaml_context` which just takes a string containing yaml. Oftentimes using the terraform interpolation
 of `jsonencode` will be your best bet.
+
+You can access the rendered template with `.rendered` much the same as with `template_file`. This will normally
+be in `json` format unless you explicitely pass in `format = "yaml"` to the resource.
