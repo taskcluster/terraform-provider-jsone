@@ -41,3 +41,10 @@ of `jsonencode` will be your best bet.
 
 You can access the rendered template with `.rendered` much the same as with `template_file`. This will normally
 be in `json` format unless you explicitely pass in `format = "yaml"` to the resource.
+
+# Development
+
+Go requirements are the same as Terraform itself (currently 1.9).
+
+In a clean GOPATH, `go get github.com/taskcluster/terraform-provider-jsone`, then switch to that directory and run `go get -t ./...` to get dependencies.
+Run `go test ./..` to test.
