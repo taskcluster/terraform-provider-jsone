@@ -42,6 +42,34 @@ of `jsonencode` will be your best bet.
 You can access the rendered template with `.rendered` much the same as with `template_file`. This will normally
 be in `json` format unless you explicitely pass in `format = "yaml"` to the resource.
 
+### Multiple Templates
+
+In some cases, it is useful to have multiple templates in the input file.
+In this case, the `rendered` value is a list of JSON- (or YAML-) formatted rendered templates.
+Use the `jsone_templates` resource (note the plural) for this purpose.
+
+```yaml
+# service.yaml
+---
+one: '{$eval: "17 - 16"}'
+---
+two: '{$eval: "12 / 6"}'
+```
+
+```terraform
+data "jsone_templates" "service" {
+  template = "${file("${path.module}/service.yaml")}"
+  yaml_context = "${jsonencode(local.context)}"
+}
+
+output "rendered" {
+  value1 = "${data.jsone_template.service.rendered[0]}"
+  # --> '{"one": 1}'
+  value2 = "${data.jsone_template.service.rendered[1]}"
+  # --> '{"two": 2}'
+}
+```
+
 # Development
 
 Go requirements are the same as Terraform itself (currently 1.9).
