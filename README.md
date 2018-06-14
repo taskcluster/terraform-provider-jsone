@@ -70,6 +70,14 @@ output "rendered" {
 }
 ```
 
+### Extra Functions
+
+This provider adds a `base64encode()` function to the context that can be used as follows:
+
+```terraform
+foo: {$eval: "base64encode(something)"}
+```
+
 # Development
 
 Go requirements are the same as Terraform itself (currently 1.9).

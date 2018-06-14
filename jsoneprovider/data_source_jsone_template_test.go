@@ -29,6 +29,13 @@ func TestJsoneTemplateRendering(t *testing.T) {
 		{`{something="hello"}`, ``, `{"foo": "$${something}"}`, `foo: hello`, `yaml`},
 		{`{something="hello"}`, ``, `foo: $${something}`, `foo: hello`, `yaml`},
 		{
+			`{something="hello"}`,
+			``,
+			`foo: {$$eval: "base64encode(something)"}`,
+			`{"foo": "aGVsbG8="}`,
+			`yaml`,
+		},
+		{
 			``,
 			`a: 1`,
 			`baz: {$$map: [123, 456], each(x): {$$eval: 'x + a'}}`,
