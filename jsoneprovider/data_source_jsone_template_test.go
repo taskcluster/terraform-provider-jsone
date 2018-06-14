@@ -125,7 +125,7 @@ func TestJsoneTemplatesRendering(t *testing.T) {
 								yaml.Unmarshal([]byte(value[i].(string)), &result)
 							}
 
-							require.Equal(t, want, result, fmt.Sprintf("template:\n%s\ncontext:\n%s\ngot:\n%s\nwant:\n%s\n", i, tt.template, tt.context, got, tt.want))
+							require.Equal(t, want, result, fmt.Sprintf("template:\n%s\ncontext:\n%s\ngot:\n%s\nwant:\n%s\n", tt.template, tt.context, got, tt.want))
 						}
 						return nil
 					},
