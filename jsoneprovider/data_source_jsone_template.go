@@ -3,6 +3,7 @@ package jsoneprovider
 import (
 	"bytes"
 	"crypto/sha256"
+	"encoding/base64"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
@@ -13,6 +14,7 @@ import (
 	"github.com/hashicorp/terraform/helper/schema"
 	"github.com/hashicorp/terraform/helper/validation"
 	jsone "github.com/taskcluster/json-e"
+	jsoneInterpreter "github.com/taskcluster/json-e/interpreter"
 	"github.com/taskcluster/terraform-provider-jsone/yaml"
 )
 
@@ -90,11 +92,21 @@ func hash(s string) string {
 func readCommon(d *schema.ResourceData) ([]string, error) {
 	template := d.Get("template").(string)
 	format := d.Get("format").(string)
-	context := d.Get("context").(map[string]interface{})
+	ctx := d.Get("context").(map[string]interface{})
 	yamlContext := d.Get("yaml_context").(string)
 
 	if yamlContext != "" {
-		ghodssYaml.Unmarshal([]byte(yamlContext), &context)
+		ghodssYaml.Unmarshal([]byte(yamlContext), &ctx)
+	}
+
+	context := map[string]interface{}{
+		"base64encode": jsoneInterpreter.WrapFunction(func (s string) (string) {
+			return base64.StdEncoding.EncodeToString([]byte(s))
+		}),
+	}
+
+	for k, v := range ctx {
+		context[k] = v
 	}
 
 	dec := yaml.NewDecoder(bytes.NewReader([]byte(template)))
